@@ -1,43 +1,37 @@
-'''
-1. 아이디어
-- bfs 사용(최단거리) => 상하좌우 1 존재
--
-2. 시간복잡도
-- O(V+E) = 500n
-- V: n*m = 100n
-- E: 4V = 400n
-3. 자료구조
-- 지도 int[][]
-- 방문 bool[][]
-'''
-
-from collections import deque
-
 import sys
+from collections import deque
 
 input = sys.stdin.readline
 
-n, m = map(int, input().split())
-
-graph = [list(map(int, input().rstrip())) for _ in range(n)]
-
 dx = [-1, 1, 0, 0]
 dy = [0, 0, -1, 1]
+
+n, m = map(int, input().split())
+graph = []
+
+for i in range(n):
+    graph.append(list(map(int, input().rstrip())))
+
 
 def bfs(x, y):
     q = deque()
     q.append((x, y))
 
     while q:
-        ex, ey = q.popleft()
+        x, y = q.popleft()
 
         for i in range(4):
-            nx = ex + dx[i]
-            ny = ey + dy[i]
+            nx = x + dx[i]
+            ny = y + dy[i]
 
-            if 0 <= nx < n and 0 <= ny < m and graph[nx][ny] == 1:
+            if nx < 0 or nx >= n or ny < 0 or ny >= m:
+                continue
+            if graph[nx][ny] == 0:
+                continue
+            if graph[nx][ny] == 1:
+                graph[nx][ny] = graph[x][y] + 1
                 q.append((nx, ny))
-                graph[nx][ny] = graph[ex][ey] + 1
+
     return graph[n - 1][m - 1]
 
 
